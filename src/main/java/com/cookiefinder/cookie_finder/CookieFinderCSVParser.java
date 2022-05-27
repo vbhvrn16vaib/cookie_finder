@@ -26,7 +26,8 @@ public class CookieFinderCSVParser implements FileParser<List<CookieLog>> {
         try {
             allLines = Files.lines(Path.of(file.getName()))
                     .map(x -> x.split(DELIMITER))
-                    .map(arr -> new CookieLog(arr[0], timeParser.fromZonedDateString(arr[1])))
+                    .filter(arr -> arr.length == 2 && !arr[0].trim().isEmpty() && !arr[1].trim().isEmpty())
+                    .map(arr -> new CookieLog(arr[0].trim(), timeParser.fromZonedDateString(arr[1].trim())))
                     .toList();
         } catch (IOException e) {
             LOG.error("Failed to parse the file {}", e.getMessage());
